@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="64" cy="64" r="60" fill="#4A6CF7" />
+  
+  <!-- Brain Icon (Representing AI) -->
+  <path d="M64 30C53.5066 30 45 38.5066 45 49C45 53.2715 46.4644 57.1925 48.9234 60.2812C46.0494 63.5925 44.25 67.8347 44.25 72.5C44.25 83.8218 53.4282 93 64.75 93C70.3347 93 75.3847 90.6234 79.0234 86.7812C80.2644 86.9269 81.5347 87 82.8281 87C93.3216 87 101.828 78.4934 101.828 68C101.828 57.5066 93.3216 49 82.8281 49C81.5347 49 80.2644 49.0731 79.0234 49.2188C75.3847 45.3766 70.3347 43 64.75 43C63.8216 43 62.9066 43.0731 62.0234 43.2188C59.5644 40.1301 58.1 36.2091 58.1 32C58.1 30.8954 57.2046 30 56.1 30H64Z" fill="white"/>
+  
+  <!-- Tab Outlines -->
+  <rect x="30" y="45" width="25" height="18" rx="4" stroke="white" stroke-width="3" fill="none"/>
+  <rect x="30" y="70" width="25" height="18" rx="4" stroke="white" stroke-width="3" fill="none"/>
+  <rect x="73" y="45" width="25" height="18" rx="4" stroke="white" stroke-width="3" fill="none"/>
+  <rect x="73" y="70" width="25" height="18" rx="4" stroke="white" stroke-width="3" fill="none"/>
+  
+  <!-- Connection Lines -->
+  <line x1="42.5" y1="63" x2="42.5" y2="70" stroke="white" stroke-width="2"/>
+  <line x1="85.5" y1="63" x2="85.5" y2="70" stroke="white" stroke-width="2"/>
+  <line x1="55" y1="54" x2="73" y2="54" stroke="white" stroke-width="2"/>
+  <line x1="55" y1="79" x2="73" y2="79" stroke="white" stroke-width="2"/>
+  
+  <!-- AI Nodes -->
+  <circle cx="42.5" cy="54" r="4" fill="#00E5FF"/>
+  <circle cx="42.5" cy="79" r="4" fill="#00E5FF"/>
+  <circle cx="85.5" cy="54" r="4" fill="#00E5FF"/>
+  <circle cx="85.5" cy="79" r="4" fill="#00E5FF"/>
+  
+  <!-- Center Node -->
+  <circle cx="64" cy="64" r="6" fill="#00E5FF"/>
+</svg>

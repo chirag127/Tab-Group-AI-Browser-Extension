@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab Group AI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Tab Group AI</h1>
+      <div class="actions">
+        <button id="refresh-btn" title="Re-categorize tabs">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 4v6h-6"></path>
+            <path d="M1 20v-6h6"></path>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"></path>
+            <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"></path>
+          </svg>
+        </button>
+        <button id="settings-btn" title="Settings">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div id="loading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Categorizing tabs...</p>
+    </div>
+
+    <div id="error-message" class="error-message hidden">
+      <p>Error categorizing tabs. Please try again.</p>
+    </div>
+
+    <div id="tab-groups" class="tab-groups">
+      <!-- Tab groups will be dynamically inserted here -->
+    </div>
+
+    <div id="settings-panel" class="settings-panel hidden">
+      <h2>Settings</h2>
+      <div class="setting-item">
+        <label for="theme-toggle">Dark Mode</label>
+        <label class="switch">
+          <input type="checkbox" id="theme-toggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="setting-item">
+        <label for="persistence-toggle">Save Groups on Browser Close</label>
+        <label class="switch">
+          <input type="checkbox" id="persistence-toggle" checked>
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <template id="tab-group-template">
+    <div class="tab-group">
+      <div class="group-header">
+        <div class="group-title-container">
+          <span class="group-icon"></span>
+          <h2 class="group-title" contenteditable="true"></h2>
+        </div>
+        <div class="group-actions">
+          <button class="toggle-group" title="Collapse/Expand Group">
+            <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="tabs-container">
+        <!-- Tabs will be dynamically inserted here -->
+      </div>
+    </div>
+  </template>
+
+  <template id="tab-item-template">
+    <div class="tab-item" draggable="true">
+      <img class="tab-favicon" src="" alt="">
+      <span class="tab-title"></span>
+      <button class="close-tab" title="Close Tab">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </template>
+
+  <script src="utils/storage.js"></script>
+  <script src="utils/tabUtils.js"></script>
+  <script src="groupManager.js"></script>
+  <script src="aiCategorizer.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
