@@ -1,0 +1,56 @@
+name: Apex CI/CD Pipeline
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build & Test Extension
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: 3. Setup Node.js v20 Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: 4. Install Project Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 5. Run Biome Linter & Formatter Check
+        run: pnpm lint # Assumes a script in package.json: "biome check ."
+
+      - name: 6. Install Playwright Browser Dependencies
+        run: pnpm playwright install --with-deps
+
+      - name: 7. Run Playwright E2E Tests
+        run: pnpm test # Assumes a script in package.json: "playwright test"
+
+      - name: 8. Build Production Artifacts
+        run: pnpm build # Standard WXT build command
+
+      - name: 9. Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cogniflow-extension-builds
+          path: |
+            ./.output/chrome-mv3
+            ./.output/firefox-mv3
+            ./.output/edge-mv3
+          if-no-files-found: error
