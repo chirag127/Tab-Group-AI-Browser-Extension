@@ -1,54 +1,21 @@
-Creative Commons Attribution-NonCommercial 4.0 International Public License
+MIT License
 
-By accessing and using this Work, you agree to the terms of this license. If you do not agree with all the terms, do not use the Work.
+Copyright (c) 2024 Your Name
 
-1. Definitions
-   "Adaptation" means a work based upon the Work, including in the form of a translation, modification, or any other form whereby the Work may be transformed or adapted including in order to make it suitable to different languages or formats. Such a work is an Adaptation if it continues to embody the content of the Work in a form other than purely transient electronic transmission, or if it embodies a substantial part of the Work.
-   "Adaptor" means a person who creates an Adaptation.
-   "Attribution" means to give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
-   "Collective Work" means a work, such as a periodical issue, anthology or encyclopedia, in which the Work is assembled with works on different subjects or by different authors in the whole, in a form other than as an Adaptation. A work consisting of musical works published in a collection is a Collective Work.
-   "Disseminate" means to make the Work available to the public by any means, whether by distribution, by public display, or by any other method.
-   "NonCommercial" means not primarily intended for or directed towards commercial advantage or monetary compensation.
-   "Publicly Perform" means to perform the Work publicly, by any means and in any form (e.g. by living performers, by means of any device, machine or process). This does not apply to the performance of sound recordings and the performance of the Work of "publicly perform" in the case of sound recordings.
-   "Share" means to provide copies of the Work or Adaptation to others.
-   "Source" means the form in which the Licensor originated the Work, including any derivative works, tools, or scripts used in the creation of the Work.
-   "You" means the individual or entity exercising the rights under this License. The phrase "You" means "You" and "Adaptors" combined.
-   "Licensor" means the individual or entity(ies) who make the Work available under this License.
-   "Work" means the copyrightable work or compilation of works offered under this License.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-2. Fair Dealing Rights
-   Nothing in this License is intended to reduce, limit, or condition any clause regarding fair dealing or any equivalent exceptions to copyright that may apply to Your use of the Work.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-3. Scope of the License
-   This License applies to the Work and any works that are substantially the same in form or content of the Work, including any adaptations or collective works which include the Work. The Licensor grants You the rights defined in this License, and such rights are perpetual and irrevocable.
-
-4. Conditions
-   You may exercise the rights under this License only if You agree to the following conditions:
-
-   a. Attribution
-      You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
-
-   b. NonCommercial
-      You may not exercise any of the rights granted to You by this License for NonCommercial purposes.
-
-   c. If You Share the Work or Adaptation:
-      You must give appropriate credit to the Licensor, and provide a link to the license. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
-
-5. Disclaimer of Warranty
-   THIS WORK IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NONINFRINGEMENT.
-
-6. Limitation of Liability
-   THE LICENSOR SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS WORK, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-7. Term and Termination
-   This License is perpetual. However, if You violate any of the terms of this License, You may lose the rights granted to You by this License. Specifically, Your right to Publicly Perform the Work or Adaptation shall terminate immediately if You fail to comply with the Attribution or NonCommercial conditions of this License.
-
-8. Governing Law
-   This License shall be governed by and construed in accordanceance with the laws of the jurisdiction in which the Licensor is located.
-
-9. Miscellaneous
-   This License constitutes the entire agreement between the parties with respect to the Work licensed.
-
-Creative Commons is not a party to this License, and makes no warranty whatsoever with respect to the Work. Creative Commons will not be liable to You or any other party for any claims arising out of the License or Your use of the Work.
-
-Notwithstanding the foregoing, if you take any action to enforce any of Creative Commons' or the Licensor's copyright or other intellectual property rights against any of Your users who have violated any of the terms of this License, You must provide each user on whose behalf you act with a copy of this License and any applicable Creative Commons terms and conditions. You may not represent yourself as being endorsed by Creative Commons or the Licensor. Nothing in this License is intended to or shall grant you any particular rights to trademarks or service marks of the Licensor or Creative Commons. Permissions beyond the scope of this license may be available by contacting the Licensor.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
