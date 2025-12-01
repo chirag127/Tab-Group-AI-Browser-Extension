@@ -1,51 +1,80 @@
-# 🤝 Contributing to CogniFlow-AI-Tab-Organization-Browser-Extension
+# Contributing to CogniFlow
 
-Welcome to the next generation of workspace intelligence. We uphold the **Apex Technical Authority** standard: **Zero-Defect, High-Velocity, Future-Proof.** Contributions that align with these principles are highly valued.
+First off, thank you for considering contributing to CogniFlow. It's people like you that make open source such a powerful force for innovation. We are committed to building a high-quality, performant, and reliable AI-powered tab organizer, and we welcome your expertise.
 
-## 1. Foundational Prerequisites
+Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, they should reciprocate that respect in addressing your issue or assessing patches and features.
 
-Before initiating any development, ensure your local environment adheres to the mandated Apex Toolchain standard:
+## Code of Conduct
 
-1.  **Node.js/npm:** Latest LTS version (v20+ recommended).
-2.  **Git:** Version 2.30+.
-3.  **Core Tools:** Ensure `biome` and `vitest` are installed globally or runnable via `npx`.
+This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior.
 
-## 2. The Recursive Perfection Loop (Mandatory Development Cycle)
+## How Can I Contribute?
 
-Every contribution must pass through the local validation loop before a Pull Request is created. This mirrors our CI/CD gate:
+### Reporting Bugs
 
-1.  **Audit & Fix:** Implement the feature/fix, adhering strictly to **SOLID** principles and **Self-Documenting Code**. Avoid nesting; favor Guard Clauses.
-2.  **Format:** Run `npx @biomejs/biome check --apply` to ensure absolute formatting compliance.
-3.  **Test:** Write comprehensive tests in the corresponding `tests/` directory. Ensure **100%** coverage on all modified logic paths (success, failure, edge cases).
-4.  **Verify:** Execute the full test suite: `npx vitest run`.
-5.  **DECISION GATE:** If any linter warning, formatting error, or test failure occurs, **RETURN TO STEP 1** immediately. **DO NOT COMMIT** until the build is perfectly clean.
+This section guides you through submitting a bug report for CogniFlow. Following these guidelines helps maintainers and the community understand your report, reproduce the behavior, and find related reports.
 
-## 3. Commit Message Standard (Conventional Commits)
+Before creating bug reports, please check the existing [issues](https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/issues) as you might find out that you don't need to create one. When you are creating a bug report, please [include as many details as possible](https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/blob/main/.github/ISSUE_TEMPLATE/bug_report.md) by filling out the required template.
 
-All commits **MUST** follow the [Conventional Commits Specification](https://www.conventionalcommits.org/en/v1.0.0/).
+### Suggesting Enhancements
 
-| Type | Purpose | Example |
-| :--- | :--- | :--- |
-| `feat` | A new feature (e.g., new Gemini integration endpoint). | `feat: add support for Gemini 3.0 model selection` |
-| `fix` | A bug fix. | `fix: resolve memory leak during tab grouping` |
-| `refactor` | Code change that neither fixes a bug nor adds a feature. | `refactor: simplify useSession hook logic` |
-| `docs` | Documentation only changes. | `docs: update README architecture diagram` |
-| `test` | Adding missing tests or correcting existing tests. | `test: add Playwright scenario for persistence failure` |
-| `ci` | Changes to CI configuration files and scripts. | `ci: update required node version in workflow` |
+This section guides you through submitting an enhancement suggestion for CogniFlow, including completely new features and minor improvements to existing functionality. Following these guidelines helps maintainers and the community understand your suggestion and find related suggestions.
 
-## 4. Pull Request Submission Protocol
+### Your First Code Contribution
 
-1.  **Branching:** Work on feature branches off `main` (e.g., `feat/ai-settings-ui`).
-2.  **Issue Linking:** Every non-trivial PR **MUST** reference an existing Issue (e.g., `Closes #123`). If you create a new issue, link it in the PR description.
-3.  **Template Use:** Use the provided PR Template (`.github/PULL_REQUEST_TEMPLATE.md`). Ensure the **Architectural Impact** section is filled out.
-4.  **CI Gate:** **Do not request review** until the GitHub Actions workflow (`ci.yml`) shows a successful build, test pass, and formatting confirmation.
-5.  **Review Focus:** Reviewers will focus on adherence to **SOLID**, **Type Safety (TypeScript Strict Mode)**, and **Testing Coverage (90%+ mandate)**.
+Unsure where to begin contributing to CogniFlow? You can start by looking through `good first issue` and `help wanted` issues:
 
-## 5. Security & Integrity Disclosure
+- **Good first issues** - issues which should only require a few lines of code, and a test or two.
+- **Help wanted issues** - issues which should be a bit more involved than `good first issue` issues.
 
-If you discover any potential security vulnerability, performance bottleneck, or critical system failure point, **DO NOT** open a public issue or PR immediately.
+## Pull Request Process
 
-1.  Follow the guidelines in our **Security Policy** (`.github/SECURITY.md`).
-2.  Contact the maintainers privately via the process defined in that document.
+We adhere to a strict, professional development process to ensure code quality and maintainability. All contributions must be submitted via Pull Requests (PRs).
 
-Thank you for helping us maintain **CogniFlow** as a zero-error, high-performance productivity tool.
+1.  **Fork & Branch**: Fork the repository and create your branch from `main`. Use a descriptive branch name following this convention: `feature/<feature-name>`, `fix/<issue-number>-<short-description>`, or `docs/<topic>`.
+
+    bash
+    git checkout -b feature/new-ai-grouping-algorithm
+    
+
+2.  **Set Up the Environment**: Follow the instructions in the `README.md` to set up your local development environment.
+
+3.  **Implement Changes**: Make your changes to the codebase. Adhere to the following principles:
+    *   **Code Quality**: Write clean, readable, and maintainable code. Follow SOLID, DRY, and YAGNI principles.
+    *   **Architecture**: This project follows the **Feature-Sliced Design (FSD)** pattern. Please place new code in the appropriate layers and slices.
+    *   **Code Style**: This project uses **Biome** for linting and formatting. Ensure your code is compliant before committing.
+
+        bash
+        # Check and apply formatting/linting fixes
+        npx biome check --apply .
+        
+
+4.  **Write Tests**: All new features and bug fixes **must** be accompanied by tests. We use:
+    *   **Vitest** for unit and integration tests.
+    *   **Playwright** for end-to-end tests.
+
+    Run the test suite to ensure your changes haven't introduced regressions.
+
+    bash
+    npm test
+    
+
+5.  **Commit Your Changes**: We enforce the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. This is critical for automated versioning and changelog generation. Your commit message should be structured as follows:
+
+    
+    feat(grouping): add support for context-aware tab grouping
+    
+    Implemented a new algorithm that leverages the Gemini API to analyze page content for more intelligent grouping. This resolves issue #42.
+    
+    BREAKING CHANGE: The `groupTabs` function signature has changed.
+    
+    Common types include: `feat`, `fix`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`.
+
+6.  **Submit a Pull Request**: Push your branch to your fork and open a Pull Request against the `main` branch of the upstream repository. 
+    *   Fill out the [Pull Request template](https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
+    *   Ensure all CI checks (GitHub Actions) are passing.
+    *   Link the PR to any relevant issues.
+
+7.  **Code Review**: A maintainer will review your PR. Be prepared to address feedback and make changes. Once approved, your contribution will be merged.
+
+Thank you for your contribution!
