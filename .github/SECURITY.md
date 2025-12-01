@@ -1,61 +1,52 @@
-# Security Policy for CogniFlow-AI-Tab-Organization-Browser-Extension
+# Security Policy
 
-As the Apex Technical Authority, security is prioritized using a **Zero-Trust, Fail-Fast** paradigm, especially critical for browser extensions handling user context and integrating external AI APIs.
+## Supported Versions
 
-## 1. Reporting a Vulnerability
+We are committed to maintaining a secure and reliable application. The following versions are actively supported with security updates:
 
-We value proactive security disclosures. If you discover a vulnerability, please follow the designated private reporting channel immediately. **DO NOT** create a public issue or pull request for potential security flaws.
+| Version | Supported          |
+| ------- | ------------------ |
+| **Latest** | :white_check_mark: Yes |
 
-1.  **Email Private Channel:** Send a detailed report to `security@cogniflow.dev` (hypothetical secure address).
-2.  **Template:** Please include the following in your report:
-    *   **Vulnerability Type:** (e.g., XSS, CSRF, API Key Leakage, Supply Chain).
-    *   **Affected Version(s):** Specific extension version or source commit hash.
-    *   **Proof-of-Concept (PoC):** Clear, reproducible steps to trigger the vulnerability.
-    *   **Impact Assessment:** Describe the potential harm.
+Older versions are not supported and may contain vulnerabilities. Please upgrade to the latest version.
 
-We guarantee a response within **48 hours** acknowledging receipt and outlining the next steps.
+## Reporting a Vulnerability
 
-## 2. Security Architecture Principles (2026 Standards)
+We take security vulnerabilities very seriously. If you discover a security issue, please report it responsibly via the following methods:
 
-This project adheres to the following mandatory DevSecOps protocols:
+1.  **Email:** Send an encrypted email to `security@example.com` (replace with actual security contact if available).
+    *   Subject: `Security Vulnerability Report - [Project Name]`
+    *   Include details about the vulnerability, affected versions, and steps to reproduce.
+    *   We will acknowledge receipt of your email within 48 hours.
 
-### 2.1. Zero Trust & Input Validation
-*   **Principle:** All data originating from the user, the browser environment (DOM, Storage), or external APIs (Gemini) is considered **untrusted**.
-*   **Enforcement:** Strict input sanitization is applied before any data is rendered to the UI or passed to sensitive functions (e.g., `DOMPurify` for HTML insertion, strict type checking on all API payloads).
+2.  **GitHub Security Advisories:** If applicable, you can submit a private security vulnerability report through GitHub's Security Advisory feature.
 
-### 2.2. Supply Chain Integrity
-*   **Dependency Vetting:** Dependencies are managed via `uv` (or equivalent in JS projects) and subjected to automated security scans upon PR merge.
-*   **SBOM Generation:** A Software Bill of Materials (SBOM) is generated as part of the CI pipeline using standard tooling, ensuring transparency regarding all bundled components.
+We will NOT ask you to file security bugs as regular GitHub Issues. We will respond to your report within 48 hours and aim to provide a patch, release, or other fix as quickly as possible. You will be informed when and how the vulnerability has been resolved. We appreciate your efforts to help us improve our security.
 
-### 2.3. Secrets Management
-*   **Environment Isolation:** Sensitive configuration (API Keys, credentials) **must never** be hardcoded. They are managed exclusively via environment variables, loaded securely during the build/deployment process, adhering to the 12-Factor App methodology.
-*   **Browser Extension Context:** Sensitive data stored client-side (e.g., user preferences, session tokens) must use the browser's secure storage mechanisms (`chrome.storage.local` or equivalent, with appropriate encryption layers for highly sensitive items).
+## Vulnerability Disclosure Policy
 
-## 3. Handling of Gemini API Keys
+We encourage responsible disclosure of security vulnerabilities. Upon receiving a report, we will:
 
-The integration with Google Gemini utilizes API calls. Security measures for this critical component include:
+*   Acknowledge your submission promptly.
+*   Investigate the reported issue thoroughly.
+*   Work to fix the vulnerability as quickly as possible.
+*   Notify you when a fix has been implemented.
+*   Give credit to the reporter once the vulnerability is publicly disclosed (if desired by the reporter).
 
-1.  **Server-Side Proxy (Preferred):** Where possible, direct user calls to the Gemini API are proxied through a secure backend to prevent client-side key exposure. If this is a pure client-side extension, keys must be strongly obfuscated and rate-limited client-side, acknowledging the inherent risk of client-side key exposure.
-2.  **Rate Limiting:** Client-side requests are governed by internal throttling mechanisms to mitigate abuse potential.
-3.  **Usage Auditing:** All API interactions are logged (non-content data) for anomaly detection.
+We will not pursue legal action against individuals who:
 
-## 4. Mitigation and Remediation Timeline
+*   Report vulnerabilities in good faith.
+*   Provide us with reasonable time to fix the issue before making any public disclosure.
+*   Do not exploit the vulnerability beyond what is necessary to demonstrate its existence.
 
-Upon confirmation of a vulnerability, the following SLA is enforced:
+## Security Best Practices
 
-| Severity | Remediation Target | Release Cycle |
-| :--- | :--- | :--- |
-| **Critical (RCE, Data Leak)** | Immediate Hotfix Deployment | Within 24 Hours |
-| **High (Privilege Escalation, Auth Bypass)** | Urgent Patch | Within 72 Hours |
-| **Medium (Stored XSS, Logic Flaw)** | Next Scheduled Release Sprint | Within 7 Days |
-| **Low (Information Leakage, Minor Bugs)** | Scheduled Review | Next Major/Minor Release |
+*   **API Keys & Secrets:** Never commit API keys, passwords, or other sensitive credentials directly into the codebase. Use environment variables or a secure secrets management system.
+*   **Dependency Management:** Regularly update project dependencies to their latest stable versions to incorporate security patches. Use tools like `npm audit`, `pip-audit`, or `cargo audit` to check for known vulnerabilities.
+*   **Input Validation:** Always validate and sanitize user-provided input to prevent common attacks like Cross-Site Scripting (XSS) and SQL Injection.
+*   **Rate Limiting:** Implement appropriate rate limiting on API endpoints to prevent abuse and denial-of-service attacks.
+*   **Least Privilege:** Adhere to the principle of least privilege for all system access and permissions.
 
-## 5. Penetration Testing & Auditing
+## Reporting Non-Security Issues
 
-This repository is subject to automated and periodic manual security testing:
-
-*   **CI/CD Gate:** Security scanning tools (e.g., Snyk/Dependabot integration) are mandatory checks in `.github/workflows/ci.yml`. A failure in the security audit stops the build.
-*   **Static Analysis:** Code is continuously analyzed using best-practice linters (`Biome`, `Ruff`) configured for security-related warnings.
-
---- 
-*Last Reviewed: December 2025 by Apex Technical Authority.*
+For bugs or feature requests that are not security-related, please use the standard GitHub Issue tracker.
