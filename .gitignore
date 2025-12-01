@@ -1,34 +1,45 @@
-# Dependency Directories
+# Node.js
 node_modules/
-
-# Build Artifacts (Vite/Bundlers)
-dist/
-.vite/
-.turbo/
-
-# TypeScript & Language Server Files
-*.js.map
-*.d.ts
-.tsbuildinfo
-
-# Testing and Coverage
-coverage/
-vitest.out/
-
-# IDE/Editor Specific Files
-.idea/
-.vscode/extensions.json
-.vscode/settings.json
-
-# Logs and Caches
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+.pnp/
+.pnp.cjs
 
-# Operating System Files
+# Build artifacts
+dist/
+build/
+output/
+
+# WXT specific
+.wxt/
+
+# Vite specific
+.vite/
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS specific
 .DS_Store
 Thumbs.db
 
-# Browser Extension Specific (if using manifest v3 staging)
-.chromium-browser-profile/
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Biome cache (if any, typically .biome.jsonc is version controlled)
+.biome/
