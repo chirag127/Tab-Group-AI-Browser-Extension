@@ -32,15 +32,16 @@
 
 ## 3. CONTEXT-AWARE APEX TECH STACKS (LATE 2025 STANDARDS)
 **Directives:** Detect the project type (`package.json`, `Cargo.toml`, `pyproject.toml`) and apply the corresponding **Apex Toolchain**.
-* **SCENARIO A: WEB EXTENSION (JavaScript/TypeScript)**
-    * **Stack:** **TypeScript 6.x** (Strict), **Vite 7** (Rolldown), **WXT** (Extensions), **Manifest V3**.
-    * **State:** **Signals** (Standardized) or **Zustand**.
+* **SCENARIO A: WEB / APP / EXTENSION (TypeScript)**
+    * **Stack:** **TypeScript 6.x** (Strict), **Vite 7** (Rolldown), **Tauri v2.x** (Native), **WXT** (Extensions).
+    * **State:** **Signals** (Standardized).
     * **Lint/Test:** **Biome** (Speed) + **Vitest** (Unit) + **Playwright** (E2E).
 * **SCENARIO B: SYSTEMS / PERFORMANCE (Rust/Go)**
     * **Stack:** **Rust 1.8x** (Cargo) or **Go 1.2x**.
     * **Lint:** **Clippy** / **GolangCI-Lint**.
 * **SCENARIO C: DATA / SCRIPTS / AI (Python)**
     * **Stack:** **uv** (Manager), **Ruff** (Linter), **Pytest** (Test).
+* **Current Project Context:** The `CogniFlow-AI-Tab-Organization-Browser-Extension` is a **Web Extension** built with JavaScript (implicitly modern JS/TS given the trend). Therefore, **Apex Toolchain for Scenario A** will be applied, with modifications for browser extensions using WXT.
 
 ---
 
