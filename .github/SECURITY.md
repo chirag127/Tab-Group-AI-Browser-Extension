@@ -1,52 +1,49 @@
-# Security Policy
+# Security Policy for CogniFlow-AI-Tab-Organizer-Browser-Extension
 
-## Supported Versions
+As an Apex Technical Authority project, security is paramount. This repository adheres to the highest standards of security posture, leveraging Manifest V3 requirements and modern dependency management practices.
 
-We are committed to maintaining a secure and reliable application. The following versions are actively supported with security updates:
+## 1. Supported Versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| **Latest** | :white_check_mark: Yes |
+This project follows a strict, forward-looking policy. We only actively support the latest stable release train for all primary dependencies (TypeScript, Vite, WXT, Gemini API integration).
 
-Older versions are not supported and may contain vulnerabilities. Please upgrade to the latest version.
+**If you are using a version older than the latest stable release, please upgrade before reporting issues.**
 
-## Reporting a Vulnerability
+## 2. Vulnerability Reporting
 
-We take security vulnerabilities very seriously. If you discover a security issue, please report it responsibly via the following methods:
+We welcome responsible disclosure of security vulnerabilities. Please follow the process outlined below to ensure prompt and secure remediation.
 
-1.  **Email:** Send an encrypted email to `security@example.com` (replace with actual security contact if available).
-    *   Subject: `Security Vulnerability Report - [Project Name]`
-    *   Include details about the vulnerability, affected versions, and steps to reproduce.
-    *   We will acknowledge receipt of your email within 48 hours.
+### A. Private Disclosure (Recommended)
 
-2.  **GitHub Security Advisories:** If applicable, you can submit a private security vulnerability report through GitHub's Security Advisory feature.
+If you discover a vulnerability that could lead to unauthorized access, data leakage, or compromise of user environments (especially concerning the Gemini API key handling or extension storage):
 
-We will NOT ask you to file security bugs as regular GitHub Issues. We will respond to your report within 48 hours and aim to provide a patch, release, or other fix as quickly as possible. You will be informed when and how the vulnerability has been resolved. We appreciate your efforts to help us improve our security.
+1.  **Do not create a public issue or pull request.**
+2.  Send an encrypted email detailing the vulnerability, including steps to reproduce, to the security contact address: `security@chirag127.dev` (Note: This is a placeholder; actual contact should be configured via GitHub Security Advisories).
+3.  If GitHub Security Advisories are enabled for this repository, please use the **"Report a vulnerability"** feature provided by GitHub.
 
-## Vulnerability Disclosure Policy
+We aim to respond to all private disclosures within **48 hours**.
 
-We encourage responsible disclosure of security vulnerabilities. Upon receiving a report, we will:
+### B. Public Disclosure
 
-*   Acknowledge your submission promptly.
-*   Investigate the reported issue thoroughly.
-*   Work to fix the vulnerability as quickly as possible.
-*   Notify you when a fix has been implemented.
-*   Give credit to the reporter once the vulnerability is publicly disclosed (if desired by the reporter).
+Public disclosure (e.g., opening an issue) is only recommended after a reasonable patch window (defined below) has passed, or if the vulnerability is actively being exploited in the wild and remediation is urgently required.
 
-We will not pursue legal action against individuals who:
+## 3. Patch and Remediation Policy
 
-*   Report vulnerabilities in good faith.
-*   Provide us with reasonable time to fix the issue before making any public disclosure.
-*   Do not exploit the vulnerability beyond what is necessary to demonstrate its existence.
+Upon receiving a valid vulnerability report, we adhere to the following timeline:
 
-## Security Best Practices
+| Phase | Target Duration | Action |
+| :--- | :--- | :--- |
+| **Triage & Confirmation** | 24 Hours | Verify the report's validity. |
+| **Fix Development** | 7 Days | Architect and implement the necessary patch (e.g., dependency upgrade, code change). |
+| **Internal Testing** | 2 Days | Verify fix using Playwright E2E suite and Biome validation. |
+| **Coordinated Release** | 5 Days | Deploy the fix via a new stable release version. |
 
-*   **API Keys & Secrets:** Never commit API keys, passwords, or other sensitive credentials directly into the codebase. Use environment variables or a secure secrets management system.
-*   **Dependency Management:** Regularly update project dependencies to their latest stable versions to incorporate security patches. Use tools like `npm audit`, `pip-audit`, or `cargo audit` to check for known vulnerabilities.
-*   **Input Validation:** Always validate and sanitize user-provided input to prevent common attacks like Cross-Site Scripting (XSS) and SQL Injection.
-*   **Rate Limiting:** Implement appropriate rate limiting on API endpoints to prevent abuse and denial-of-service attacks.
-*   **Least Privilege:** Adhere to the principle of least privilege for all system access and permissions.
+**Total Time to Patch (TTP):** Maximum of **14 Days** from confirmed report.
 
-## Reporting Non-Security Issues
+## 4. Security Best Practices for CogniFlow
 
-For bugs or feature requests that are not security-related, please use the standard GitHub Issue tracker.
+Due to the nature of this browser extension and its reliance on external APIs (Gemini):
+
+1.  **API Key Management:** All processes must strictly adhere to Manifest V3 Service Worker isolation. **Under no circumstances** should the Gemini API Key be hardcoded or stored insecurely in client-side JavaScript bundles. All API calls must be proxied or securely managed within the background service worker.
+2.  **Input Sanitization:** All data processed via the Gemini API must be treated as untrusted input when reflected back into the DOM. Utilize safe DOM APIs (e.g., `textContent` over `innerHTML` where appropriate) to mitigate XSS risks.
+3.  **Dependency Auditing:** Continuous monitoring is enforced via `.github/workflows/ci.yml`. Any dependency flagged by `npm audit` above 'low' severity will halt CI until resolved or explicitly waived by the Apex Authority.
+4.  **Manifest V3 Compliance:** The extension is built entirely within MV3 specifications, ensuring proper Content Security Policy (CSP) configurations and worker lifecycle management.
