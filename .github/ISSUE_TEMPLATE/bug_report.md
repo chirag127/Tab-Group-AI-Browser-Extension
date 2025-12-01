@@ -1,64 +1,104 @@
 ---
 name: Bug Report
-about: Report a problem with the CogniFlow AI Tab Organization Browser Extension
-title: "Bug: [Concise Summary of Issue]"
+about: Report a bug to help us improve
+title: "[Bug] - "
 labels: "bug"
 assignees: ""
 
+body:
+  - type: markdown
+    attributes:
+      value: | 
+        ## 🚨 Bug Report
 
-}
----
+        Please provide a clear and concise description of the bug you encountered. This helps us to understand and resolve the issue quickly.
 
-## 🐛 Bug Description
+        Thank you for taking the time to report this!
 
-Provide a clear and concise description of the bug. What unexpected behavior are you observing?
+  - type: input
+    id: version
+    attributes:
+      label: Version of CogniFlow-AI-Tab-Organization-Browser-Extension
+      description: Please specify the version of the extension you are using. If you don't know, you can usually find it in the extension's details page in your browser.
+      placeholder: e.g., 1.2.0
+    validations:
+      required: true
 
-**To Reproduce**
+  - type: input
+    id: browser_version
+    attributes:
+      label: Browser and Version
+      description: Please specify the browser (e.g., Chrome, Firefox, Edge) and its exact version.
+      placeholder: e.g., Chrome 125.0.6422.113
+    validations:
+      required: true
 
-Steps to reproduce the behavior:
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Provide a step-by-step guide to reproduce the bug.
+      placeholder: |
+        1. Go to...
+        2. Click on...
+        3. Observe that...
+    validations:
+      required: true
 
-1.  Go to '[URL/Context where bug occurs]'
-2.  Click on '[Specific action]'
-3.  Observe the behavior: [Describe the observed behavior]
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: Describe what you expected to happen.
+      placeholder: e.g., The tabs should be automatically categorized into 'Work' and 'Personal'.
+    validations:
+      required: true
 
-**Expected Behavior**
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      description: Describe what actually happened. Be specific!
+      placeholder: e.g., The tabs are not categorized, and instead, a console error is displayed.
+    validations:
+      required: true
 
-What did you expect to happen?
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console Logs (if applicable)
+      description: | 
+        If possible, please provide any relevant error messages or logs from the browser's developer console.
+        * **How to get logs:**
+          1. Open your browser's Developer Tools (usually by pressing F12 or right-clicking and selecting "Inspect" or "Inspect Element").
+          2. Go to the "Console" tab.
+          3. Try to reproduce the bug.
+          4. Copy and paste the *entire* relevant output (especially any red error messages).
+        * **Privacy:** Please ensure no sensitive information is leaked.
+      placeholder: Paste console logs here...
+    validations:
+      required: false
 
-**Screenshots & Screen Recordings**
+  - type: textarea
+    id: environment_details
+    attributes:
+      label: Additional Context / Environment Details
+      description: Any other information that might be helpful, such as operating system, screen resolution, specific websites being used, etc.
+      placeholder: e.g., Windows 11, using the extension on GitHub.com
+    validations:
+      required: false
 
-If applicable, add screenshots or a screen recording to help explain your problem. For screen recordings, you may attach a GIF or a link to a video hosting service.
+  - type: markdown
+    attributes:
+      value: | 
+        ## 🤖 AI Agent Directives Alignment
 
-**Environment Details**
+        This report is being processed by the Apex Technical Authority's AI agents. Please ensure the above information is structured clearly for automated analysis.
 
-*   **Extension Version:** [e.g., 1.0.0 - obtain from extension settings/manifest]
-*   **Browser:** [e.g., Chrome 120.0.0.0, Firefox 119.0]
-*   **Operating System:** [e.g., Windows 11, macOS Sonoma 14.2]
-*   **Google Gemini Model:** [e.g., Gemini 2.0 Flash Lite]
-*   **Any other relevant context**
-
-## 💡 Additional Context
-
-Add any other context about the problem here. For example, does this bug occur intermittently or consistently? Are there any specific configurations that trigger it?
-
-## 🧠 AI Agent Directives (Internal Use Only)
-
-<details>
-  <summary>System Directives</summary>
-
-This section is for internal use by AI agents to understand the environment and enforce standards.
-
-*   **Project Name:** `CogniFlow-AI-Tab-Organization-Browser-Extension`
-*   **Primary Language:** JavaScript
-*   **Core Framework/Tech:** WXT (Web Extension Tooling), Vite, Browser APIs, Google Gemini API.
-*   **Apex Toolchain Applied:** Scenario A (Web/App/Extension - TypeScript, though project is JS. Adapting based on JS presence and WXT).
-*   **Testing Frameworks:** Vitest (Unit), Playwright (E2E).
-*   **Linter/Formatter:** Biome.
-*   **Development Principle:** Zero-Defect, High-Velocity, Future-Proof.
-*   **API Interaction:** Ensure all Gemini API calls are robust, handle rate limits gracefully, and include proper error handling and retries.
-*   **State Management:** Employ CQS and SOLID principles. Ensure UI updates are optimistic and reflect asynchronous operations correctly.
-*   **Security:** Sanitize ALL user input and data sent to external APIs (OWASP Top 10 2025). Implement Zero Trust for all interactions.
-*   **Performance:** Optimize for INP < 200ms. Minimize resource usage.
-*   **Code Hygiene:** Strict adherence to Semantic Naming, Guard Clauses, DRY, KISS, and No Comments (unless explaining 'Why').
-
-</details>
+        **Current Tech Stack (Scenario A: Web/Extension):**
+        *   **Language:** JavaScript (as per repo context, though TypeScript is preferred for future state)
+        *   **Build/Bundler:** Vite
+        *   **Extension Framework:** WXT (or similar for cross-browser compatibility)
+        *   **AI Model:** Google Gemini 2.0 Flash Lite (as per repo description)
+        *   **Testing:** Vitest (Unit), Playwright (E2E)
+        *   **Linting:** Biome
