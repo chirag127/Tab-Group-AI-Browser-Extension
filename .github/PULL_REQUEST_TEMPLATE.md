@@ -1,43 +1,56 @@
 # Pull Request Template
 
-## ✅ Checklist
+## ✨ What's New?
 
-* [ ] I have read and understood the [CONTRIBUTING.md](https://github.com/YourUsername/CogniFlow-AI-Tab-Organization-Browser-Extension/blob/main/.github/CONTRIBUTING.md) guidelines.
-* [ ] My changes are consistent with the project's **Apex Technical Authority** standards and principles.
-* [ ] I have run linters and formatters (`biome check --apply`, `ruff check --fix`) and they pass.
-* [ ] I have run all tests (`vitest`, `pytest`) and they pass.
-* [ ] My code includes comprehensive unit tests for new functionality.
-* [ ] My changes have been thoroughly reviewed by myself, and I'm confident in their quality.
-* [ ] I have updated the documentation (if applicable) to reflect my changes.
-* [ ] My code adheres to the **SOLID** and **DRY** principles.
-* [ ] My code follows the **CQS** (Command Query Separation) pattern.
-* [ ] All external inputs are sanitized, adhering to the **DevSecOps Protocol**.
-* [ ] I have reviewed the `AGENTS.md` to ensure alignment with AI directives.
+*(Please provide a concise summary of your changes. What problem does this PR solve? What new functionality does it introduce?)*
 
-## 🚀 Type of Change
+## 🚀 Key Changes
 
-* [ ] **New Feature** (Non-breaking change which adds functionality)
-* [ ] **Bug Fix** (Non-breaking change which fixes an issue)
-* [ ] **Refactor** (Code style change, or structural refactoring)
-* [ ] **Performance Improvement**
-* [ ] **Documentation Update**
-* [ ] **CI/CD Update**
-* [ ] **Other** (Please describe below)
+*   *(Bullet point 1: Describe a significant change)*
+*   *(Bullet point 2: Describe another significant change)*
+*   *(Add more bullet points as needed)*
 
-## 📝 Description
+## 🎯 Target Audience
 
-*Provide a concise and clear explanation of the changes introduced in this Pull Request. Focus on the 'what' and 'why' of your modifications.*
+*(Who is this change primarily for? Developers, End-users, specific modules?)*
 
-## 🐛 Related Issues
+## 🛠️ Technical Details
 
-*Closes #issue-number*
-*Fixes #issue-number*
-*See #issue-number*
+*(Provide any relevant technical context. If this involves specific architectural patterns, dependencies, or complex logic, detail it here.)*
 
-## 💡 Screenshots/Recordings (if applicable)
+## 🧪 How to Test
 
-*Include visual evidence of your changes, especially for UI/UX related modifications.*
+*(Provide clear, step-by-step instructions on how to test your changes. Include any necessary setup or specific scenarios to verify functionality.)*
 
-## ⚙️ Additional Context (Optional)
+1.  *(Step 1)*
+2.  *(Step 2)*
+3.  *(Step 3)*
 
-*Add any other context about the problem this PR is solving or the solution chosen.*
+## 🔗 Related Issues/Discussions
+
+*(Link to any related GitHub Issues, Pull Requests, or Discussions using `Closes #<issue_number>` or `Ref #<issue_number>`)*
+
+*   Closes #
+
+## 🌟 Developer Checklist
+
+*   [ ] My code adheres to the project's **Apex Technical Authority** standards.
+*   [ ] I have performed a self-review of my own code.
+*   [ ] I have commented my code, particularly in hard-to-understand areas.
+*   [ ] I have made corresponding changes to the documentation (if applicable).
+*   [ ] My changes generate no new warnings or errors.
+*   [ ] I have added tests that prove my fix is effective or that my feature works.
+*   [ ] New and existing unit tests pass locally with my changes.
+*   [ ] Any dependent changes have been merged and published.
+*   [ ] I have checked the **AI Agent Directives** in `.github/AGENTS.md` and ensured my changes align.
+
+## 🚀 AI Agent Directives Alignment
+
+*(This section is auto-generated or to be verified against the latest `.github/AGENTS.md`. Ensure your changes respect the defined architectural patterns, toolchain configurations, and verification commands.)*
+
+*   **Tech Stack Adherence:** TypeScript, Vite, WXT, Biome, Playwright, Gemini API integration.
+*   **Architectural Patterns:** Manifest V3 Compliance, Feature-Sliced Design principles (if applicable).
+*   **Verification:** Changes should pass Biome linting and Vitest unit tests. E2E tests via Playwright should be considered for critical flows.
+*   **AI Integration:** Changes involving Gemini API must use the defined fallback cascade (Gemini 3 Pro primary) and handle rate limiting gracefully.
+
+---
