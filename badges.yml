@@ -1,0 +1,18 @@
+- name: Build Status
+  url: https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/actions/workflows/ci.yml/badge.svg
+  markdown: "[![Build Status](https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/actions/workflows/ci.yml/badge.svg?branch=main&style=flat-square)](https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/actions/workflows/ci.yml)"
+- name: Code Coverage
+  url: https://codecov.io/gh/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/branch/main/graph/badge.svg
+  markdown: "[![Code Coverage](https://codecov.io/gh/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/branch/main/graph/badge.svg?style=flat-square)](https://codecov.io/gh/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension)"
+- name: Tech Stack
+  url: https://img.shields.io/badge/Tech_Stack-TypeScript%20%7C%20Vite%20%7C%20WXT-blueviolet?style=flat-square&logo=typescript
+  markdown: "[![Tech Stack](https://img.shields.io/badge/Tech_Stack-TypeScript%20%7C%20Vite%20%7C%20WXT-blueviolet?style=flat-square&logo=typescript)](https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension)"
+- name: Lint Format
+  url: https://img.shields.io/badge/Lint%20%26%20Format-Biome-fuchsia?style=flat-square&logo=biome
+  markdown: "[![Lint & Format](https://img.shields.io/badge/Lint%20%26%20Format-Biome-fuchsia?style=flat-square&logo=biome)](https://biomejs.dev/)"
+- name: License
+  url: https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey?style=flat-square
+  markdown: "[![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey?style=flat-square)](LICENSE)"
+- name: GitHub Stars
+  url: https://img.shields.io/github/stars/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension?style=flat-square
+  markdown: "[![GitHub Stars](https://img.shields.io/github/stars/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension?style=flat-square)](https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/stargazers)"
