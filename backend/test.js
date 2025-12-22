@@ -1,9 +1,8 @@
 // Tab Group AI - Backend Test Script
-// Tests the Gemini API integration
+// Tests the AI service integration
 
 require('dotenv').config();
-const geminiService = require('./services/gemini');
-const logger = require('./utils/logger');
+const aiService = require('./services/ai'); // Updated import
 
 // Sample tabs data
 const sampleTabs = [
@@ -39,31 +38,21 @@ const sampleTabs = [
   }
 ];
 
-// Test the categorization
-async function testCategorization() {
-  try {
-    logger.info('Starting categorization test...');
-    
+describe('AI Service', () => {
+  // Test the categorization functionality
+  it('should categorize tabs into groups', async () => {
     // Check if API key is set
-    if (!process.env.GEMINI_API_KEY) {
-      logger.error('GEMINI_API_KEY is not set in .env file');
-      return;
+    if (!process.env.CEREBRAS_API_KEY) {
+      throw new Error('CEREBRAS_API_KEY is not set in .env file');
     }
-    
-    logger.info(`Testing with ${sampleTabs.length} sample tabs`);
-    
-    // Call the categorization service
-    const result = await geminiService.categorizeTabs(sampleTabs);
-    
-    logger.info('Categorization result:');
-    console.log(JSON.stringify(result, null, 2));
-    
-    logger.info('Test completed successfully');
-  } catch (error) {
-    logger.error(`Test failed: ${error.message}`);
-    console.error(error);
-  }
-}
 
-// Run the test
-testCategorization();
+    // Call the categorization service
+    const result = await aiService.categorizeTabs(sampleTabs);
+
+    // Assert that the result is an object
+    expect(typeof result).toBe('object');
+
+    // Assert that the result has at least one group
+    expect(Object.keys(result).length).toBeGreaterThan(0);
+  });
+});

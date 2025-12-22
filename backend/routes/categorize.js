@@ -3,86 +3,53 @@
 
 const express = require('express');
 const router = express.Router();
-const geminiService = require('../services/gemini');
+const aiService = require('../services/ai'); // Updated import
 const logger = require('../utils/logger');
 
+// --- Routes ---
+
 /**
- * POST /api/categorize
- * Categorizes tabs using Gemini AI
- * 
- * Request body:
- * {
- *   tabs: [
- *     { id: 1, title: "Tab Title", url: "https://example.com", favIconUrl: "..." },
- *     ...
- *   ]
- * }
- * 
- * Response:
- * {
- *   groups: {
- *     "Category1": [{ id: 1, title: "Tab Title", ... }],
- *     ...
- *   }
- * }
+ * @route POST /api/categorize
+ * @description Categorizes tabs using the AI service.
+ * @access Public
  */
 router.post('/categorize', async (req, res, next) => {
-  try {
-    const { tabs } = req.body;
-    
-    // Validate request
-    if (!tabs || !Array.isArray(tabs) || tabs.length === 0) {
-      return res.status(400).json({
-        error: 'Invalid Request',
-        message: 'Request must include a non-empty array of tabs'
-      });
-    }
-    
-    // Log request (without sensitive data)
-    logger.info(`Categorization request received for ${tabs.length} tabs`);
-    
-    // Categorize tabs using Gemini
-    const categorizedGroups = await geminiService.categorizeTabs(tabs);
-    
-    // Return categorized groups
-    res.status(200).json({
-      groups: categorizedGroups
+  const { tabs } = req.body;
+
+  // Guard clause for invalid request body
+  if (!Array.isArray(tabs) || tabs.length === 0) {
+    logger.warn('Invalid categorization request received.');
+    return res.status(400).json({
+      error: 'Invalid Request',
+      message: 'Request must include a non-empty array of tabs.',
     });
+  }
+
+  try {
+    logger.info(`Categorization request received for ${tabs.length} tabs.`);
+    const categorizedGroups = await aiService.categorizeTabs(tabs);
+    res.status(200).json({ groups: categorizedGroups });
   } catch (error) {
-    logger.error(`Error in categorize endpoint: ${error.message}`);
+    logger.error(`Error in /api/categorize endpoint: ${error.message}`);
+    // Pass error to the centralized error handler
     next(error);
   }
 });
 
 /**
- * GET /api/categories
- * Returns predefined categories
+ * @route GET /api/categories
+ * @description Returns a list of predefined categories.
+ * @access Public
  */
 router.get('/categories', (req, res) => {
-  const categories = [
-    'Work',
-    'Shopping',
-    'Social Media',
-    'Entertainment',
-    'News',
-    'Research',
-    'Development',
-    'Education',
-    'Finance',
-    'Travel',
-    'Health',
-    'Technology',
-    'Sports',
-    'Food',
-    'Music',
-    'Art',
-    'Science',
-    'Gaming',
-    'Productivity',
-    'Other'
+  // Centralized category list for consistency
+  const predefinedCategories = [
+    'Work', 'Shopping', 'Social Media', 'Entertainment', 'News', 'Research',
+    'Development', 'Education', 'Finance', 'Travel', 'Health', 'Technology',
+    'Sports', 'Food', 'Music', 'Art', 'Science', 'Gaming', 'Productivity', 'Other'
   ];
   
-  res.status(200).json({ categories });
+  res.status(200).json({ categories: predefinedCategories });
 });
 
 module.exports = router;

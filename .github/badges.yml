@@ -1,0 +1,14 @@
+# .github/badges.yml
+badges:
+  - name: "License"
+    shield: "https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg"
+    url: "https://creativecommons.org/licenses/by-nc/4.0/"
+  - name: "Open Issues"
+    shield: "https://img.shields.io/github/issues/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension"
+    url: "https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/issues"
+  - name: "Forks"
+    shield: "https://img.shields.io/github/forks/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension"
+    url: "https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/network/members"
+  - name: "Stars"
+    shield: "https://img.shields.io/github/stars/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension"
+    url: "https://github.com/chirag127/CogniFlow-AI-Tab-Organizer-Browser-Extension/stargazers"

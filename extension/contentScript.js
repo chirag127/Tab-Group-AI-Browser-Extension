@@ -1,80 +1,91 @@
 // Tab Group AI - Content Script
-// This script runs in the context of web pages and can extract content for better categorization
+// This script runs in the context of web pages to extract content for enhanced categorization.
 
-// Listen for messages from the extension
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+/**
+ * Extracts a text from a given CSS selector.
+ * @param {string} selector - The CSS selector to query.
+ * @returns {string} The trimmed text content of the element, or an empty string if not found.
+ */
+const getTextFromSelector = (selector) => {
+  const element = document.querySelector(selector);
+  return element ? element.innerText.trim() : '';
+};
+
+/**
+ * Extracts content from a meta tag.
+ * @param {string} name - The value of the 'name' attribute of the meta tag.
+ * @returns {string} The content of the meta tag, or an empty string if not found.
+ */
+const getMetaContent = (name) => {
+  const element = document.querySelector(`meta[name="${name}"]`);
+  return element ? element.content.trim() : '';
+};
+
+/**
+ * Extracts and concatenates text from multiple elements matching a selector.
+ * @param {string} selector - The CSS selector for the elements.
+ * @returns {string} A space-separated string of the text content.
+ */
+const getTextFromMultipleSelectors = (selector) => {
+  return Array.from(document.querySelectorAll(selector))
+    .map(el => el.innerText.trim())
+    .join(' ');
+};
+
+/**
+ * Attempts to find the main content of the page using a prioritized list of selectors.
+ * @returns {string} The text content of the main content area.
+ */
+const findMainContent = () => {
+  const selectors = ['main', 'article', '#content', '.content', '#main', '.main'];
+  for (const selector of selectors) {
+    const content = getTextFromSelector(selector);
+    if (content) return content;
+  }
+  // Fallback to concatenating all paragraphs if no main container is found
+  return getTextFromMultipleSelectors('p');
+};
+
+/**
+ * Extracts relevant content from the current page.
+ * @returns {{
+ *   title: string,
+ *   url: string,
+ *   metaDescription: string,
+ *   metaKeywords: string,
+ *   h1: string,
+ *   mainContent: string
+ * }} Extracted page content.
+ */
+const extractPageContent = () => {
+  const mainContent = findMainContent();
+  const MAX_CONTENT_LENGTH = 5000;
+
+  return {
+    title: document.title.trim(),
+    url: window.location.href,
+    metaDescription: getMetaContent('description'),
+    metaKeywords: getMetaContent('keywords'),
+    h1: getTextFromSelector('h1'),
+    mainContent: mainContent.substring(0, MAX_CONTENT_LENGTH),
+  };
+};
+
+/**
+ * Handles messages from the extension's background script.
+ */
+const messageListener = (message, sender, sendResponse) => {
   if (message.action === 'extractContent') {
     try {
-      // Extract page content for AI categorization
       const content = extractPageContent();
       sendResponse({ success: true, content });
     } catch (error) {
       console.error('Error extracting content:', error);
       sendResponse({ success: false, error: error.message });
     }
-    return true; // Indicates async response
+    return true; // Indicates an asynchronous response.
   }
-});
+};
 
-/**
- * Extracts relevant content from the current page for categorization
- * Focuses on important elements like headings, meta tags, and main content
- * @returns {Object} Extracted page content
- */
-function extractPageContent() {
-  // Get meta information
-  const metaDescription = document.querySelector('meta[name="description"]')?.content || '';
-  const metaKeywords = document.querySelector('meta[name="keywords"]')?.content || '';
-  
-  // Get headings
-  const h1Text = Array.from(document.querySelectorAll('h1'))
-    .map(h => h.innerText.trim())
-    .join(' ');
-  
-  const h2Text = Array.from(document.querySelectorAll('h2'))
-    .map(h => h.innerText.trim())
-    .join(' ');
-  
-  // Try to get main content
-  let mainContent = '';
-  
-  // First try to find main content containers
-  const mainElements = [
-    document.querySelector('main'),
-    document.querySelector('article'),
-    document.querySelector('#content'),
-    document.querySelector('.content'),
-    document.querySelector('#main'),
-    document.querySelector('.main')
-  ].filter(Boolean);
-  
-  if (mainElements.length > 0) {
-    // Use the first main element found
-    mainContent = mainElements[0].innerText.trim();
-  } else {
-    // Fallback: get paragraphs
-    const paragraphs = Array.from(document.querySelectorAll('p'))
-      .map(p => p.innerText.trim())
-      .join(' ');
-    
-    mainContent = paragraphs;
-  }
-  
-  // Limit content length to avoid excessive data transfer
-  const MAX_CONTENT_LENGTH = 5000;
-  if (mainContent.length > MAX_CONTENT_LENGTH) {
-    mainContent = mainContent.substring(0, MAX_CONTENT_LENGTH);
-  }
-  
-  return {
-    title: document.title,
-    url: window.location.href,
-    metaDescription,
-    metaKeywords,
-    headings: {
-      h1: h1Text,
-      h2: h2Text
-    },
-    mainContent
-  };
-}
+// --- Initialization ---
+chrome.runtime.onMessage.addListener(messageListener);

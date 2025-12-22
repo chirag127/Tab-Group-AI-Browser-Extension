@@ -1,258 +1,151 @@
 // Tab Group AI - Popup Script
-// Handles the popup UI and user interactions
+// Handles the popup UI, user interactions, and communication with the background script.
 
-document.addEventListener("DOMContentLoaded", async () => {
-    // Initialize components
-    await initializePopup();
+// --- UI Elements ---
+const UIElements = {
+  loading: document.getElementById('loading'),
+  errorMessage: document.getElementById('error-message'),
+  tabGroupsContainer: document.getElementById('tab-groups'),
+  settingsPanel: document.getElementById('settings-panel'),
+  themeToggle: document.getElementById('theme-toggle'),
+  persistenceToggle: document.getElementById('persistence-toggle'),
+  refreshBtn: document.getElementById('refresh-btn'),
+  settingsBtn: document.getElementById('settings-btn'),
+};
 
-    // Set up event listeners
-    setupEventListeners();
-});
+// --- UI Manager ---
+const UIManager = {
+  setLoading(isLoading) {
+    UIElements.loading.classList.toggle('hidden', !isLoading);
+  },
 
-/**
- * Initialize the popup UI
- */
-async function initializePopup() {
-    try {
-        // Initialize group manager
-        await GroupManager.init();
+  showError(message) {
+    UIElements.errorMessage.textContent = message;
+    UIElements.errorMessage.classList.remove('hidden');
+    setTimeout(() => UIElements.errorMessage.classList.add('hidden'), 5000);
+  },
 
-        // Load settings and apply theme
-        const settings = await StorageUtil.getSettings();
-        applyTheme(settings.theme);
+  applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+  },
 
-        // Set settings toggle states
-        document.getElementById("theme-toggle").checked =
-            settings.theme === "dark";
-        document.getElementById("persistence-toggle").checked =
-            settings.persistGroups;
+  updateSettings(settings) {
+    this.applyTheme(settings.theme);
+    UIElements.themeToggle.checked = settings.theme === 'dark';
+    UIElements.persistenceToggle.checked = settings.persistGroups;
+  },
 
-        // Hide loading indicator
-        document.getElementById("loading").classList.add("hidden");
-    } catch (error) {
-        console.error("Error initializing popup:", error);
-        document.getElementById("loading").classList.add("hidden");
-        document.getElementById("error-message").classList.remove("hidden");
+  renderTabGroups(groups) {
+    UIElements.tabGroupsContainer.innerHTML = ''; // Clear existing groups
+    if (Object.keys(groups).length === 0) {
+      UIElements.tabGroupsContainer.innerHTML = '<p class="empty-message">No tab groups found. Click refresh to categorize your tabs.</p>';
+      return;
     }
-}
 
-/**
- * Set up event listeners for UI elements
- */
-function setupEventListeners() {
-    // Refresh button
-    document
-        .getElementById("refresh-btn")
-        .addEventListener("click", async () => {
-            await GroupManager.categorizeTabs();
-        });
+    for (const [groupName, tabs] of Object.entries(groups)) {
+      const groupElement = this.createGroupElement(groupName, tabs);
+      UIElements.tabGroupsContainer.appendChild(groupElement);
+    }
+  },
 
-    // Settings button
-    document.getElementById("settings-btn").addEventListener("click", () => {
-        const settingsPanel = document.getElementById("settings-panel");
-        settingsPanel.classList.toggle("hidden");
-    });
+  createGroupElement(groupName, tabs) {
+    const group = document.createElement('div');
+    group.className = 'tab-group';
+    group.innerHTML = `
+      <h2 class="group-header">${groupName}</h2>
+      <div class="tabs-container">
+        ${tabs.map(tab => this.createTabElement(tab)).join('')}
+      </div>
+    `;
+    return group;
+  },
 
-    // Theme toggle
-    document
-        .getElementById("theme-toggle")
-        .addEventListener("change", async (e) => {
-            const theme = e.target.checked ? "dark" : "light";
-            applyTheme(theme);
+  createTabElement(tab) {
+    return `
+      <div class="tab-item" data-tab-id="${tab.id}">
+        <img src="${tab.favIconUrl || 'icons/default-icon.png'}" alt="Favicon" class="favicon">
+        <span class="tab-title">${tab.title}</span>
+      </div>
+    `;
+  },
+};
 
-            // Save setting
-            const settings = await StorageUtil.getSettings();
-            settings.theme = theme;
-            await StorageUtil.saveSettings(settings);
-        });
+// --- Storage & Communication ---
+const AppService = {
+  async sendMessage(action, payload) {
+    return chrome.runtime.sendMessage({ action, ...payload });
+  },
+  async getSettings() {
+    return (await chrome.storage.sync.get('settings')).settings || { theme: 'light', persistGroups: true };
+  },
+  async saveSettings(settings) {
+    return chrome.storage.sync.set({ settings });
+  },
+};
 
-    // Persistence toggle
-    document
-        .getElementById("persistence-toggle")
-        .addEventListener("change", async (e) => {
-            const persistGroups = e.target.checked;
+// --- Event Handlers ---
+const EventHandlers = {
+  async onRefresh() {
+    UIManager.setLoading(true);
+    const response = await AppService.sendMessage('categorizeTabs');
+    UIManager.setLoading(false);
 
-            // Save setting
-            const settings = await StorageUtil.getSettings();
-            settings.persistGroups = persistGroups;
-            await StorageUtil.saveSettings(settings);
-        });
-
-    // Close popup when clicking outside of it (for settings panel)
-    document.addEventListener("click", (e) => {
-        const settingsPanel = document.getElementById("settings-panel");
-        const settingsBtn = document.getElementById("settings-btn");
-
-        if (
-            !settingsPanel.classList.contains("hidden") &&
-            !settingsPanel.contains(e.target) &&
-            !settingsBtn.contains(e.target)
-        ) {
-            settingsPanel.classList.add("hidden");
-        }
-    });
-
-    // Add smooth scrolling for tab groups
-    const tabGroupsContainer = document.getElementById("tab-groups");
-    tabGroupsContainer.addEventListener("click", (e) => {
-        // Handle group header clicks for smooth scrolling
-        const groupHeader = e.target.closest(".group-header");
-        if (groupHeader) {
-            const tabGroup = groupHeader.closest(".tab-group");
-            if (tabGroup) {
-                // Smooth scroll to the clicked group
-                setTimeout(() => {
-                    tabGroup.scrollIntoView({
-                        behavior: "smooth",
-                        block: "nearest",
-                    });
-                }, 100);
-            }
-        }
-    });
-
-    // Add keyboard navigation
-    document.addEventListener("keydown", (e) => {
-        // Escape key closes settings panel
-        if (e.key === "Escape") {
-            const settingsPanel = document.getElementById("settings-panel");
-            if (!settingsPanel.classList.contains("hidden")) {
-                settingsPanel.classList.add("hidden");
-                e.preventDefault();
-            }
-        }
-    });
-
-    // Prevent body scrolling when scrolling inside tab groups
-    preventBodyScrolling();
-
-    // Handle scroll indicator
-    setupScrollIndicator();
-}
-
-/**
- * Apply theme to the UI
- * @param {string} theme - Theme name ('light' or 'dark')
- */
-function applyTheme(theme) {
-    if (theme === "dark") {
-        document.documentElement.setAttribute("data-theme", "dark");
+    if (response.success) {
+      UIManager.renderTabGroups(response.groups);
     } else {
-        document.documentElement.removeAttribute("data-theme");
+      UIManager.showError(response.error || 'Failed to categorize tabs.');
     }
+  },
+
+  onToggleSettings() {
+    UIElements.settingsPanel.classList.toggle('hidden');
+  },
+
+  async onThemeChange(event) {
+    const theme = event.target.checked ? 'dark' : 'light';
+    UIManager.applyTheme(theme);
+    const settings = await AppService.getSettings();
+    settings.theme = theme;
+    await AppService.saveSettings(settings);
+  },
+
+  async onPersistenceChange(event) {
+    const persistGroups = event.target.checked;
+    const settings = await AppService.getSettings();
+    settings.persistGroups = persistGroups;
+    await AppService.saveSettings(settings);
+  },
+};
+
+// --- Initialization ---
+async function initialize() {
+  UIManager.setLoading(true);
+
+  // Set up event listeners
+  UIElements.refreshBtn.addEventListener('click', EventHandlers.onRefresh);
+  UIElements.settingsBtn.addEventListener('click', EventHandlers.onToggleSettings);
+  UIElements.themeToggle.addEventListener('change', EventHandlers.onThemeChange);
+  UIElements.persistenceToggle.addEventListener('change', EventHandlers.onPersistenceChange);
+
+  // Load initial data and settings
+  try {
+    const [settings, response] = await Promise.all([
+      AppService.getSettings(),
+      AppService.sendMessage('getTabGroups'),
+    ]);
+
+    UIManager.updateSettings(settings);
+
+    if (response.success) {
+      UIManager.renderTabGroups(response.groups);
+    } else {
+      UIManager.showError(response.error || 'Failed to load tab groups.');
+    }
+  } catch (error) {
+    UIManager.showError(error.message);
+  } finally {
+    UIManager.setLoading(false);
+  }
 }
 
-/**
- * Handle errors in the UI
- * @param {Error} error - Error object
- */
-function handleError(error) {
-    console.error("Error:", error);
-    document.getElementById("loading").classList.add("hidden");
-
-    const errorMessage = document.getElementById("error-message");
-    errorMessage.textContent = `Error: ${error.message}`;
-    errorMessage.classList.remove("hidden");
-
-    // Hide error after 5 seconds
-    setTimeout(() => {
-        errorMessage.classList.add("hidden");
-    }, 5000);
-}
-
-/**
- * Set up scroll indicator for tab groups
- */
-function setupScrollIndicator() {
-    const tabGroupsContainer = document.getElementById("tab-groups");
-    const scrollIndicator = document.getElementById("scroll-indicator");
-
-    // Show/hide scroll indicator based on scroll position
-    tabGroupsContainer.addEventListener("scroll", () => {
-        const { scrollTop, scrollHeight, clientHeight } = tabGroupsContainer;
-
-        // Show indicator when there's more content to scroll
-        if (
-            scrollHeight > clientHeight &&
-            scrollTop < scrollHeight - clientHeight - 50
-        ) {
-            scrollIndicator.classList.remove("hidden");
-        } else {
-            scrollIndicator.classList.add("hidden");
-        }
-    });
-
-    // Scroll down when indicator is clicked
-    scrollIndicator.addEventListener("click", () => {
-        tabGroupsContainer.scrollBy({
-            top: 200,
-            behavior: "smooth",
-        });
-    });
-
-    // Initial check
-    setTimeout(() => {
-        const { scrollHeight, clientHeight } = tabGroupsContainer;
-        if (scrollHeight > clientHeight + 50) {
-            scrollIndicator.classList.remove("hidden");
-        }
-    }, 500);
-}
-
-/**
- * Prevent body scrolling when scrolling inside tab groups
- */
-function preventBodyScrolling() {
-    // Get scrollable elements
-    const tabGroupsContainer = document.getElementById("tab-groups");
-    const tabsContainers = document.querySelectorAll(".tabs-container");
-
-    // Prevent propagation of wheel events
-    const preventPropagation = (e) => {
-        // Check if the element is scrolled to the top or bottom
-        const element = e.currentTarget;
-        const scrollTop = element.scrollTop;
-        const scrollHeight = element.scrollHeight;
-        const clientHeight = element.clientHeight;
-
-        // Allow scrolling if not at the edge
-        if (
-            (scrollTop > 0 && scrollTop < scrollHeight - clientHeight) ||
-            (scrollTop === 0 && e.deltaY > 0) ||
-            (scrollTop === scrollHeight - clientHeight && e.deltaY < 0)
-        ) {
-            e.stopPropagation();
-        }
-    };
-
-    // Add event listeners
-    tabGroupsContainer.addEventListener("wheel", preventPropagation, {
-        passive: true,
-    });
-
-    // Add event listeners to tab containers
-    tabsContainers.forEach((container) => {
-        container.addEventListener("wheel", preventPropagation, {
-            passive: true,
-        });
-    });
-
-    // Add event listeners to new tab containers when groups are updated
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === "childList") {
-                const newTabsContainers =
-                    tabGroupsContainer.querySelectorAll(".tabs-container");
-                newTabsContainers.forEach((container) => {
-                    container.removeEventListener("wheel", preventPropagation);
-                    container.addEventListener("wheel", preventPropagation, {
-                        passive: true,
-                    });
-                });
-            }
-        });
-    });
-
-    // Observe changes to the tab groups container
-    observer.observe(tabGroupsContainer, { childList: true, subtree: true });
-}
+document.addEventListener('DOMContentLoaded', initialize);
