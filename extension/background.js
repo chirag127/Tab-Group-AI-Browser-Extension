@@ -1,154 +1,140 @@
 // Tab Group AI - Background Script
-// Handles background tasks and communication with the backend
+// Handles background tasks, state management, and communication with the backend.
 
-// Configuration
-const API_BASE_URL = 'http://localhost:3000'; // Change to your deployed backend URL in production
+// --- Constants ---
+const API_BASE_URL = 'http://localhost:3000'; // Use environment variables in a real-world scenario
 const CATEGORIZATION_ENDPOINT = '/api/categorize';
 
-// Initialize when extension is installed or updated
-chrome.runtime.onInstalled.addListener(async () => {
-  console.log('Tab Group AI extension installed/updated');
-  
-  // Initialize storage with default settings
-  const defaultSettings = {
-    theme: 'light',
-    persistGroups: true,
-    lastCategorization: null
-  };
-  
-  // Check if settings already exist
-  const existingSettings = await chrome.storage.sync.get('settings');
-  if (!existingSettings.settings) {
-    await chrome.storage.sync.set({ settings: defaultSettings });
-    console.log('Default settings initialized');
-  }
-  
-  // Restore tab groups if persistence is enabled
-  const { settings } = await chrome.storage.sync.get('settings');
-  if (settings.persistGroups) {
-    const savedGroups = await chrome.storage.local.get('tabGroups');
-    if (savedGroups.tabGroups) {
-      console.log('Restoring saved tab groups');
-      // We don't actually restore tabs here, just keep the data for the popup
-    }
-  }
-});
+// --- Utility Functions ---
+const log = (level, message, data) => {
+  const timestamp = new Date().toISOString();
+  console[level](`[${timestamp}] ${message}`, data || '');
+};
 
-// Listen for messages from popup or content scripts
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'categorizeTabs') {
-    categorizeTabs()
-      .then(result => sendResponse(result))
-      .catch(error => {
-        console.error('Error categorizing tabs:', error);
-        sendResponse({ success: false, error: error.message });
+// --- API Service ---
+const apiService = {
+  async categorizeTabs(tabs) {
+    try {
+      const response = await fetch(`${API_BASE_URL}${CATEGORIZATION_ENDPOINT}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tabs }),
       });
-    return true; // Indicates async response
-  }
-  
-  if (message.action === 'getTabGroups') {
-    getTabGroups()
-      .then(groups => sendResponse({ success: true, groups }))
-      .catch(error => {
-        console.error('Error getting tab groups:', error);
-        sendResponse({ success: false, error: error.message });
-      });
-    return true; // Indicates async response
-  }
-});
 
-// Main function to categorize tabs
-async function categorizeTabs() {
-  try {
-    // Get all tabs in the current window
-    const tabs = await chrome.tabs.query({ currentWindow: true });
-    
-    // Extract relevant tab data
-    const tabData = tabs.map(tab => ({
-      id: tab.id,
-      title: tab.title,
-      url: tab.url,
-      favIconUrl: tab.favIconUrl || ''
-    }));
-    
-    // Get content from tabs (optional, based on user settings)
-    // This would require content script injection for better results
-    // For now, we'll just use titles and URLs
-    
-    // Send data to backend for categorization
-    const response = await fetch(`${API_BASE_URL}${CATEGORIZATION_ENDPOINT}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ tabs: tabData })
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
-    }
-    
-    const result = await response.json();
-    
-    // Store the categorization result
-    await chrome.storage.local.set({ 
-      tabGroups: result.groups,
-      lastCategorization: new Date().toISOString()
-    });
-    
-    // Update settings with last categorization timestamp
-    const { settings } = await chrome.storage.sync.get('settings');
-    settings.lastCategorization = new Date().toISOString();
-    await chrome.storage.sync.set({ settings });
-    
-    return { success: true, groups: result.groups };
-  } catch (error) {
-    console.error('Error in categorizeTabs:', error);
-    return { success: false, error: error.message };
-  }
-}
-
-// Function to get stored tab groups
-async function getTabGroups() {
-  const data = await chrome.storage.local.get('tabGroups');
-  return data.tabGroups || {};
-}
-
-// Listen for tab updates to potentially re-categorize
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  // Only react to complete page loads to avoid excessive categorization
-  if (changeInfo.status === 'complete') {
-    // We could trigger re-categorization here, but it might be too aggressive
-    // Instead, we'll let the user manually refresh categories
-  }
-});
-
-// Listen for tab removal to update groups
-chrome.tabs.onRemoved.addListener(async (tabId, removeInfo) => {
-  try {
-    const data = await chrome.storage.local.get('tabGroups');
-    if (!data.tabGroups) return;
-    
-    let updated = false;
-    
-    // Remove the tab from any group it's in
-    Object.keys(data.tabGroups).forEach(groupName => {
-      const index = data.tabGroups[groupName].findIndex(tab => tab.id === tabId);
-      if (index !== -1) {
-        data.tabGroups[groupName].splice(index, 1);
-        updated = true;
-        
-        // Remove empty groups
-        if (data.tabGroups[groupName].length === 0) {
-          delete data.tabGroups[groupName];
-        }
+      if (!response.ok) {
+        throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
       }
-    });
-    
-    if (updated) {
-      await chrome.storage.local.set({ tabGroups: data.tabGroups });
+      return await response.json();
+    } catch (error) {
+      log('error', 'API categorization failed:', error);
+      throw error; // Rethrow to be handled by the caller
     }
-  } catch (error) {
-    console.error('Error handling tab removal:', error);
+  },
+};
+
+// --- Storage Service ---
+const storageService = {
+  async get(key) {
+    return (await chrome.storage.local.get(key))[key];
+  },
+  async set(key, value) {
+    return chrome.storage.local.set({ [key]: value });
+  },
+  async getSync(key) {
+    return (await chrome.storage.sync.get(key))[key];
+  },
+  async setSync(key, value) {
+    return chrome.storage.sync.set({ [key]: value });
+  },
+};
+
+// --- Core Logic ---
+const tabManager = {
+  async categorizeAndStoreTabs() {
+    const tabs = await chrome.tabs.query({ currentWindow: true });
+    const tabData = tabs.map(({ id, title, url, favIconUrl }) => ({ id, title, url, favIconUrl: favIconUrl || '' }));
+
+    if (tabData.length === 0) {
+      log('info', 'No tabs to categorize.');
+      return { success: true, groups: {} };
+    }
+
+    try {
+      const result = await apiService.categorizeTabs(tabData);
+      const timestamp = new Date().toISOString();
+      await storageService.set('tabGroups', result.groups);
+      await storageService.set('lastCategorization', timestamp);
+      log('info', 'Tabs categorized and stored successfully.');
+      return { success: true, groups: result.groups };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  },
+
+  async getStoredTabGroups() {
+    return (await storageService.get('tabGroups')) || {};
+  },
+
+  async updateGroupsOnTabRemove(tabId) {
+    const tabGroups = await this.getStoredTabGroups();
+    if (!tabGroups) return;
+
+    let isUpdated = false;
+    for (const groupName in tabGroups) {
+      const initialLength = tabGroups[groupName].length;
+      tabGroups[groupName] = tabGroups[groupName].filter(tab => tab.id !== tabId);
+
+      if (tabGroups[groupName].length < initialLength) {
+        isUpdated = true;
+      }
+      if (tabGroups[groupName].length === 0) {
+        delete tabGroups[groupName];
+      }
+    }
+
+    if (isUpdated) {
+      await storageService.set('tabGroups', tabGroups);
+      log('info', `Tab ${tabId} removed and groups updated.`);
+    }
+  },
+};
+
+// --- Event Listeners ---
+
+// Extension installation or update
+chrome.runtime.onInstalled.addListener(() => {
+  log('info', 'Extension installed/updated.');
+  // Initialize default settings if they don't exist
+  storageService.getSync('settings').then(settings => {
+    if (!settings) {
+      storageService.setSync('settings', {
+        theme: 'light',
+        persistGroups: true,
+      });
+    }
+  });
+});
+
+// Message listener for popup actions
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  switch (message.action) {
+    case 'categorizeTabs':
+      tabManager.categorizeAndStoreTabs().then(sendResponse);
+      return true; // Indicates async response
+
+    case 'getTabGroups':
+      tabManager.getStoredTabGroups().then(groups => sendResponse({ success: true, groups }));
+      return true; // Indicates async response
+
+    default:
+      log('warn', 'Received unknown message action:', message.action);
+      return false;
   }
+});
+
+// Tab removal listener
+chrome.tabs.onRemoved.addListener((tabId) => {
+  tabManager.updateGroupsOnTabRemove(tabId).catch(error => {
+    log('error', 'Error updating groups on tab removal:', error);
+  });
 });
